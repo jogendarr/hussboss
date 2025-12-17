@@ -1,107 +1,100 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { API_URL } from '../api'; // Ensure this points to your configured API URL file
 
 function Signup() {
   const navigate = useNavigate();
-  
-  // States
-  const [formData, setFormData] = useState({
-    name: '', email: '', password: '', phone: '', location: 'Kathmandu', service_id: '', description: ''
+  const [formData, setFormData] = useState({ 
+    full_name: '', 
+    email: '', 
+    password: '', 
+    phone: '', 
+    address: '' 
   });
-  const [file, setFile] = useState(null); // State for the image file
-  const [preview, setPreview] = useState(null); // State for image preview
-
-  const [services, setServices] = useState([]);
-  const [locations, setLocations] = useState([]);
-
-  useEffect(() => {
-    axios.get('https://hussboss.onrender.com/services').then(res => setServices(res.data));
-    axios.get('https://hussboss.onrender.com/locations').then(res => setLocations(res.data));
-  }, []);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // Handle File Selection
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    if (selectedFile) {
-      setPreview(URL.createObjectURL(selectedFile)); // Show preview
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const loadingToast = toast.loading('Creating account & uploading photo...');
-
-    // Create FormData object (Required for file uploads)
-    const data = new FormData();
-    Object.keys(formData).forEach(key => {
-        data.append(key, formData[key]);
-    });
-    if (file) {
-        data.append('profile_image', file);
-    }
+    setLoading(true);
 
     try {
-      await axios.post('https://hussboss.onrender.com/register', data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      // Use the API_URL constant if you created it, otherwise use the full URL:
+      // 'https://hussboss.onrender.com/auth/signup'
+      const url = `${API_URL}/auth/signup`; 
       
-      toast.dismiss(loadingToast);
-      toast.success("Account Created!", { duration: 4000 });
-      navigate('/');
+      const res = await axios.post(url, formData);
+      
+      // Auto-login logic: Save user and redirect
+      localStorage.setItem("user", JSON.stringify(res.data));
+      toast.success("Account created successfully!");
+      
+      setTimeout(() => {
+        navigate('/');
+        window.location.reload(); 
+      }, 500);
+
     } catch (error) {
-      toast.dismiss(loadingToast);
-      toast.error("Signup Failed. Email taken or file too large.");
+      console.error("Signup Error:", error);
+      toast.error(error.response?.data?.detail || "Signup failed. Please try again.");
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">List Your Business</h2>
+    <div className="min-h-screen bg-brand-light flex items-center justify-center px-4 py-12">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
+        <h2 className="text-3xl font-bold text-brand-dark text-center mb-2">
+          Join HussBoss
+        </h2>
+        <p className="text-center text-gray-500 mb-8">Create an account to book professionals</p>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          
-          {/* --- PHOTO UPLOAD SECTION --- */}
-          <div className="flex flex-col items-center mb-4">
-            <div className="w-24 h-24 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden mb-2 relative">
-                {preview ? (
-                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                ) : (
-                    <span className="text-gray-400 text-sm">No Photo</span>
-                )}
+            
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Full Name</label>
+              <input type="text" placeholder="e.g. Ram Bahadur" className="w-full p-3 border rounded-lg outline-none focus:border-brand-primary"
+                value={formData.full_name} onChange={e => setFormData({...formData, full_name: e.target.value})} required />
             </div>
-            <label className="cursor-pointer bg-blue-50 text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-100 transition">
-                Upload Profile Photo
-                <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-            </label>
-          </div>
 
-          {/* Normal Fields */}
-          <input type="text" name="name" placeholder="Business Name" required onChange={handleChange} className="w-full p-2 border rounded" />
-          <input type="email" name="email" placeholder="Email" required onChange={handleChange} className="w-full p-2 border rounded" />
-          <input type="password" name="password" placeholder="Password" required onChange={handleChange} className="w-full p-2 border rounded" />
-          <input type="text" name="phone" placeholder="Phone" required onChange={handleChange} className="w-full p-2 border rounded" />
-          
-          <select name="service_id" required onChange={handleChange} className="w-full p-2 border rounded bg-white">
-            <option value="">Select Service</option>
-            {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-          </select>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
+              <input type="email" placeholder="e.g. ram@example.com" className="w-full p-3 border rounded-lg outline-none focus:border-brand-primary"
+                value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required />
+            </div>
 
-          <select name="location" required onChange={handleChange} className="w-full p-2 border rounded bg-white">
-            {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-          </select>
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">Phone</label>
+                  <input type="text" placeholder="98XXXXXXXX" className="w-full p-3 border rounded-lg outline-none focus:border-brand-primary"
+                    value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">City/Address</label>
+                  <input type="text" placeholder="Kathmandu" className="w-full p-3 border rounded-lg outline-none focus:border-brand-primary"
+                    value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
+                </div>
+            </div>
 
-          <textarea name="description" placeholder="Description..." required onChange={handleChange} className="w-full p-2 border rounded"></textarea>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
+              <input type="password" placeholder="••••••••" className="w-full p-3 border rounded-lg outline-none focus:border-brand-primary"
+                value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} required />
+            </div>
 
-          <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700">Create Account</button>
+            <button 
+                type="submit" 
+                disabled={loading}
+                className={`w-full text-white py-4 rounded-xl font-bold text-lg transition shadow-lg mt-4 ${loading ? 'bg-gray-400' : 'bg-brand-primary hover:bg-blue-600'}`}
+            >
+                {loading ? "Creating Account..." : "Sign Up"}
+            </button>
         </form>
+
+        <p className="text-center mt-8 text-gray-500 text-sm">
+          Already have an account? <Link to="/login" className="text-brand-primary font-bold hover:underline">Log In</Link>
+        </p>
       </div>
     </div>
   );
