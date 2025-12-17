@@ -10,13 +10,13 @@ function AdminDashboard() {
   }, []);
 
   const fetchRequests = () => {
-    axios.get('http://127.0.0.1:8000/admin/requests')
+    axios.get('https://hussboss.onrender.com/admin/requests')
       .then(res => setRequests(res.data));
   };
 
   const markAssigned = async (id) => {
     try {
-      await axios.put(`http://127.0.0.1:8000/admin/requests/${id}?status=Assigned`);
+      await axios.put(`https://hussboss.onrender.com/admin/requests/${id}?status=Assigned`);
       toast.success("Marked as Assigned");
       fetchRequests(); // Refresh list
     } catch (error) {

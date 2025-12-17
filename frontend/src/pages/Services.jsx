@@ -34,7 +34,7 @@ function Services() {
   };
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/services').then(res => {
+    axios.get('https://hussboss.onrender.com/services').then(res => {
       setServices(res.data);
       if (res.data.length > 0) setActiveService(res.data[0]); 
     });
@@ -55,7 +55,7 @@ function Services() {
     const loadingToast = toast.loading(`Booking ${activeService.name}...`);
     
     try {
-      await axios.post('http://127.0.0.1:8000/book_service', {
+      await axios.post('https://hussboss.onrender.com/book_service', {
         ...formData,
         user_id: user.id,
         service_type: activeService.name,

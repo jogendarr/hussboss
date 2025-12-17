@@ -17,8 +17,8 @@ function Signup() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/services').then(res => setServices(res.data));
-    axios.get('http://127.0.0.1:8000/locations').then(res => setLocations(res.data));
+    axios.get('https://hussboss.onrender.com/services').then(res => setServices(res.data));
+    axios.get('https://hussboss.onrender.com/locations').then(res => setLocations(res.data));
   }, []);
 
   const handleChange = (e) => {
@@ -48,7 +48,7 @@ function Signup() {
     }
 
     try {
-      await axios.post('http://127.0.0.1:8000/register', data, {
+      await axios.post('https://hussboss.onrender.com/register', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       

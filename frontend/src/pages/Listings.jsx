@@ -43,7 +43,7 @@ function Listings() {
     const randomCount = Math.floor(Math.random() * (19 - 5 + 1)) + 5;
     setProviderCount(randomCount);
 
-    axios.get(`http://127.0.0.1:8000/search?service_name=${service}&location=${location}`)
+    axios.get(`https://hussboss.onrender.com/search?service_name=${service}&location=${location}`)
       .then(res => {
         let realData = res.data;
         
@@ -87,7 +87,7 @@ function Listings() {
     const loadingToast = toast.loading('Submitting request...');
     
     try {
-      await axios.post('http://127.0.0.1:8000/book_service', {
+      await axios.post('https://hussboss.onrender.com/book_service', {
         ...formData,
         user_id: user.id,
         service_type: service,

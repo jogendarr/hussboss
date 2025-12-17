@@ -14,7 +14,7 @@ function Login() {
     setLoading(true);
     console.log("Submitting form...", formData); // DEBUG 1
 
-    const url = isLogin ? 'http://127.0.0.1:8000/auth/login' : 'http://127.0.0.1:8000/auth/signup';
+    const url = isLogin ? 'https://hussboss.onrender.com/auth/login' : 'https://hussboss.onrender.com/auth/signup';
     
     try {
       const res = await axios.post(url, formData);

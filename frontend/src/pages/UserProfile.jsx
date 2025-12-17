@@ -17,7 +17,7 @@ function UserProfile() {
     setUser(storedUser);
 
     // Fetch My Requests
-    axios.get(`http://127.0.0.1:8000/my_requests/${storedUser.id}`)
+    axios.get(`https://hussboss.onrender.com/my_requests/${storedUser.id}`)
       .then(res => {
         setRequests(res.data);
         setLoading(false);

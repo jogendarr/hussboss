@@ -64,7 +64,7 @@ def search_providers(
     # Add full URL to the image path
     for p in providers:
         if p.profile_image:
-            p.profile_image = f"http://127.0.0.1:8000/{p.profile_image}"
+            p.profile_image = f"https://hussboss.onrender.com/{p.profile_image}"
             
     return providers
 

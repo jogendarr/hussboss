@@ -32,8 +32,8 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/services').then(res => setServices(res.data));
-    axios.get('http://127.0.0.1:8000/locations').then(res => setLocations(res.data));
+    axios.get('https://hussboss.onrender.com/services').then(res => setServices(res.data));
+    axios.get('https://hussboss.onrender.com/locations').then(res => setLocations(res.data));
 
     function handleClickOutside(event) {
       if (serviceWrapperRef.current && !serviceWrapperRef.current.contains(event.target)) {
@@ -67,7 +67,7 @@ function Home() {
     const loadingToast = toast.loading('Submitting your request...');
     
     try {
-      await axios.post('http://127.0.0.1:8000/book_service', {
+      await axios.post('https://hussboss.onrender.com/book_service', {
         ...formData,
         user_id: user.id,
         service_type: searchTerm, 

@@ -10,7 +10,7 @@ function AdminLogin() {
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:8000/auth/login', formData);
+      const res = await axios.post('https://hussboss.onrender.com/auth/login', formData);
       if (res.data.is_admin) {
         localStorage.setItem("user", JSON.stringify(res.data));
         toast.success("Welcome Admin!");
