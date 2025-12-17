@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-function Signup() {
+function SignUp() {
   const navigate = useNavigate();
   
   // States
@@ -107,4 +107,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignUp;
