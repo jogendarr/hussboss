@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- Professional Color Palette --- */
+  
+  /* Midnight Navy: Trust & Authority (Navbars, Footers) */
+  --color-brand-dark: #0f172a;
+
+  /* Sapphire Blue: Primary Actions (Buttons, Icons) */
+  --color-brand-primary: #2563eb;
+
+  /* Slate Gray: Text (Softer than black) */
+  --color-brand-secondary: #64748b;
+
+  /* Soft Slate: Backgrounds (Clean, modern white) */
+  --color-brand-light: #f8fafc;
+
+  /* Golden Amber: Call-to-Actions (Sign up buttons) */
+  --color-brand-accent: #f59e0b;
+
+  /* --- Fonts --- */
+  --font-sans: "Inter", sans-serif;
+}
